@@ -30,11 +30,8 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
   useEffect(() => {
     let auth
     const clientID = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID as string
-    console.log(clientID !== undefined && clientID.length > 0)
 
     if (clientID) {
-      console.log("has client id")
-
       setupDiscordSdk().then(() => {
         console.log("Discord SDK is authenticated")
 
@@ -67,6 +64,7 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
           code,
         }),
       })
+
       const { access_token } = await response.json()
 
       // Authenticate with Discord client (using the access_token)

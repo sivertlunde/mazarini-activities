@@ -7,7 +7,7 @@ export async function POST(request: Request) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
-      client_id: process.env.VITE_DISCORD_CLIENT_ID as string,
+      client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID as string,
       client_secret: process.env.DISCORD_CLIENT_SECRET as string,
       grant_type: "authorization_code",
       code: req.code,
