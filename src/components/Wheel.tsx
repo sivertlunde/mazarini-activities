@@ -236,8 +236,8 @@ export const Wheel = () => {
         <div>
           <canvas
             ref={canvasRef}
-            width={600}
-            height={600}
+            width={300}
+            height={300}
             onClick={startSpin}
             style={{ borderRadius: "50%", border: "2px solid black" }}
           />
