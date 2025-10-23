@@ -27,9 +27,11 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
   const [user, setUser] = useState<DiscordUser | null>(null)
   const [ready, setReady] = useState(false)
 
-  const clientID = (process.env.DISCORD_CLIENT_ID as string) ?? ""
   useEffect(() => {
     let auth
+    const clientID = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID as string
+    console.log(clientID !== undefined && clientID.length > 0)
+
     if (clientID) {
       console.log("has client id")
 
