@@ -38,6 +38,10 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
         // We can now make API calls within the scopes we requested in setupDiscordSDK()
         // Note: the access_token returned is a sensitive secret and should be treated as such
       })
+    } else {
+      setTimeout(() => {
+        setReady(true)
+      }, 1000)
     }
 
     async function setupDiscordSdk() {

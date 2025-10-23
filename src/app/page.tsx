@@ -13,6 +13,7 @@ export default function Home() {
       <main className={styles.main}>
         <h1>Mazarini Activities</h1>
         <h2>coming soon...</h2>
+        <a href="/test">Ny side</a>
         <p>{user?.username}</p>
       </main>
     </div>
