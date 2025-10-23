@@ -1,5 +1,7 @@
 "use client"
 
+import { Participants } from "@/components/Participants"
+import { Wheel } from "@/components/Wheel"
 import { useDiscord } from "@/providers/discordProvider"
 import styles from "./page.module.css"
 
@@ -11,10 +13,8 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <h1>Mazarini Activities</h1>
-        <h2>coming soon...</h2>
-        <a href="/test">Ny side</a>
-        <p>{user?.username}</p>
+        <Wheel />
+        <Participants />
       </main>
     </div>
   )
