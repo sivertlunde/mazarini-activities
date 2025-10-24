@@ -1,7 +1,7 @@
 export async function POST(request: Request) {
   const req = await request.json()
 
-  if (!(req.body?.channelId && req.body?.content))
+  if (!(req.channelId && req.content))
     return new Response(JSON.stringify({ error: "Missing params" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
