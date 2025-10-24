@@ -10,6 +10,8 @@ export default function Home() {
   if (!ready) return <p>Initializing Discord...</p>
 
   const handleSendMsg = async () => {
+    console.log(sdk, sdk?.channelId)
+
     const response = await fetch("/api/message", {
       method: "POST",
       headers: {

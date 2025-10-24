@@ -1,6 +1,8 @@
 export async function POST(request: Request) {
   const req = await request.json()
 
+  console.log(req)
+
   if (!(req.channelId && req.content))
     return new Response(JSON.stringify({ error: "Missing params" }), {
       status: 400,
