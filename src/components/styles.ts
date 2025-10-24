@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components"
 
 export const Section = styled.section`
   width: 40%;
@@ -6,7 +6,7 @@ export const Section = styled.section`
   @media (max-width: 768px) {
     width: 100%;
   }
-`;
+`
 
 export const Button = styled.button`
   padding: 1rem;
@@ -21,21 +21,21 @@ export const Button = styled.button`
 
   // hover effect
   &:hover {
-    background-color: #61dafb;
+    background-color: #1d3e65;
   }
 
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
-`;
+`
 
 export const Input = styled.input`
   padding: 0.8rem;
   font-size: 1.2rem;
   margin: 0.5rem;
   width: 60%;
-`;
+`
 
 export const EditableWrapper = styled.div`
   display: flex;
@@ -54,7 +54,7 @@ export const EditableWrapper = styled.div`
     margin: 0;
     padding-right: 10px;
   }
-`;
+`
 
 export const EditIcon = styled.div`
   font-size: 20px;
@@ -65,4 +65,4 @@ export const EditIcon = styled.div`
   ${EditableWrapper}:hover & {
     color: black;
   }
-`;
+`

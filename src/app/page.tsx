@@ -1,7 +1,6 @@
 "use client"
 
-import { Participants } from "@/components/Participants"
-import { Wheel } from "@/components/Wheel"
+import { Button } from "@/components/styles"
 import { useDiscord } from "@/providers/discordProvider"
 import styles from "./page.module.css"
 
@@ -10,11 +9,24 @@ export default function Home() {
 
   if (!ready) return <p>Initializing Discord...</p>
 
+  const handleSendMsg = async () => {
+    const response = await fetch("/api/message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        channelId: sdk?.channelId,
+        content: "Sender mld som Høie, fra activity",
+      }),
+    })
+    console.log(response)
+  }
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Wheel />
-        <Participants />
+        <Button onClick={handleSendMsg}>Send test mld</Button>
       </main>
     </div>
   )

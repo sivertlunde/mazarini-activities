@@ -154,6 +154,7 @@ export const Wheel = () => {
     if (canvasRef.current) {
       drawWheel()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participants, rotation])
 
   const startSpin = () => {
