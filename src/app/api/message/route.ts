@@ -1,15 +1,13 @@
 export async function POST(request: Request) {
   const req = await request.json()
 
-  console.log(req)
-
   if (!(req.channelId && req.content))
     return new Response(JSON.stringify({ error: "Missing params" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     })
 
-  const { channelId, content } = req.body
+  const { channelId, content } = req
   // Now you can safely post to Discord using your bot token
   const restResp = await fetch(
     `https://discord.com/api/channels/${channelId}/messages`,
