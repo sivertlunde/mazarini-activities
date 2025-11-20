@@ -11,7 +11,7 @@ export default function Home() {
 
   const getUser = async () => {
     const response = await fetch(`/api/firebase/user/${discordUser?.id ?? ""}`)
-    console.log(response)
+    console.log(await response.json())
   }
 
   if (ready) getUser()
