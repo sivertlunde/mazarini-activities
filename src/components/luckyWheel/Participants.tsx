@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import { Button, Input, Section } from './styles';
+import { useState } from "react"
+import styled from "styled-components"
+import { Button, Input, Section } from "./styles"
 
-import useParticipantStore, { IParticipant } from './stores/participantStore';
-import { capitalizeAndCut } from './utils';
+import useParticipantStore, { IParticipant } from "./stores/participantStore"
+import { capitalizeAndCut } from "./utils"
 
 const ListItemContainer = styled.div`
   display: flex;
   justify-content: space-between;
-`;
+`
 
 const ListItem = styled.li`
   width: 100%;
@@ -20,7 +20,7 @@ const ListItem = styled.li`
   color: #282c34;
   font-weight: bold;
   font-size: 1rem;
-`;
+`
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -29,49 +29,49 @@ const ButtonGroup = styled.div`
   & > button {
     margin-left: 10px;
   }
-`;
+`
 
 const ErrorMessage = styled.p`
   color: red;
-`;
+`
 
 export const Participants = () => {
-  const participants = useParticipantStore((state) => state.participants);
-  const addParticipant = useParticipantStore((state) => state.addParticipant);
+  const participants = useParticipantStore((state) => state.participants)
+  const addParticipant = useParticipantStore((state) => state.addParticipant)
   const removeParticipant = useParticipantStore(
-    (state) => state.removeParticipant,
-  );
+    (state) => state.removeParticipant
+  )
   const [participant, setParticipant] = useState({
     id: crypto.randomUUID(),
-    name: '',
+    name: "",
     tickets: 1,
-  });
-  const [error, setError] = useState('');
+  })
+  const [error, setError] = useState("")
 
   const validateInput = (participant: IParticipant) => {
-    const specialCharPattern = /[^a-zA-Z0-9 ]/;
+    const specialCharPattern = /[^a-zA-Z0-9 ]/
     if (!participant.name.trim()) {
-      return 'Participant cannot be empty.';
+      return "Participant cannot be empty."
     }
     if (specialCharPattern.test(participant.name)) {
-      return 'Participant cannot contain special characters.';
+      return "Participant cannot contain special characters."
     }
     if (participant.tickets < 1 || participant.tickets > 5) {
-      return 'Participant must have between 1 and 5 tickets';
+      return "Participant must have between 1 and 5 tickets"
     }
-    return '';
-  };
+    return ""
+  }
 
   const handleAddParticipant = () => {
-    const validationError = validateInput(participant);
+    const validationError = validateInput(participant)
     if (validationError) {
-      setError(validationError);
+      setError(validationError)
     } else {
-      addParticipant(participant);
-      setParticipant({ id: crypto.randomUUID(), name: '', tickets: 1 });
-      setError('');
+      addParticipant(participant)
+      setParticipant({ id: crypto.randomUUID(), name: "", tickets: 1 })
+      setError("")
     }
-  };
+  }
 
   return (
     <Section>
@@ -84,8 +84,8 @@ export const Participants = () => {
           setParticipant({ ...participant, name: e.target.value })
         }
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === 'Enter') {
-            handleAddParticipant();
+          if (e.key === "Enter") {
+            handleAddParticipant()
           }
         }}
       />
@@ -97,8 +97,8 @@ export const Participants = () => {
           setParticipant({ ...participant, tickets: Number(e.target.value) })
         }
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === 'Enter') {
-            handleAddParticipant();
+          if (e.key === "Enter") {
+            handleAddParticipant()
           }
         }}
       />
@@ -117,5 +117,5 @@ export const Participants = () => {
         ))}
       </ul>
     </Section>
-  );
-};
+  )
+}

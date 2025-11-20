@@ -2,6 +2,7 @@ import confetti from "canvas-confetti"
 import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
+import useWindowDimensions from "@/hooks/useWindowDimensions"
 import { Header } from "./Header"
 import useParticipantStore, { IParticipant } from "./stores/participantStore"
 import { Button } from "./styles"
@@ -65,6 +66,8 @@ export const Wheel = () => {
 
   const [showPopup, setShowPopup] = useState(false)
   const [popupWinner, setPopupWinner] = useState<IParticipant | null>(null)
+
+  const { width, height } = useWindowDimensions()
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const numSectors = participants.reduce((sum, curr) => sum + curr.tickets, 0)
@@ -155,7 +158,7 @@ export const Wheel = () => {
       drawWheel()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [participants, rotation])
+  }, [participants, rotation, width, height])
 
   const startSpin = () => {
     if (spinning) return
@@ -233,40 +236,38 @@ export const Wheel = () => {
   return (
     <>
       <Header />
-      <Main>
-        <div>
-          <canvas
-            ref={canvasRef}
-            width={300}
-            height={300}
+      <div style={{ width: "100%", height: "100%" }}>
+        <canvas
+          ref={canvasRef}
+          width={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
+          height={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
+          onClick={startSpin}
+          style={{ borderRadius: "50%", border: "2px solid black" }}
+        />
+        <ButtonsContainer>
+          <Button
             onClick={startSpin}
-            style={{ borderRadius: "50%", border: "2px solid black" }}
-          />
-          <ButtonsContainer>
+            disabled={participants.length === 0 || spinning}
+          >
+            Spin
+          </Button>
+        </ButtonsContainer>
+        {showPopup && popupWinner && (
+          <Popup>
+            <h2>Congratulations!</h2>
+            <h3>{capitalize(popupWinner.name)}</h3>
             <Button
-              onClick={startSpin}
+              onClick={() => {
+                updateParticipant(popupWinner)
+                setShowPopup(false)
+              }}
               disabled={participants.length === 0 || spinning}
             >
-              Spin
+              OK
             </Button>
-          </ButtonsContainer>
-          {showPopup && popupWinner && (
-            <Popup>
-              <h2>Congratulations!</h2>
-              <h3>{capitalize(popupWinner.name)}</h3>
-              <Button
-                onClick={() => {
-                  updateParticipant(popupWinner)
-                  setShowPopup(false)
-                }}
-                disabled={participants.length === 0 || spinning}
-              >
-                OK
-              </Button>
-            </Popup>
-          )}
-        </div>
-      </Main>
+          </Popup>
+        )}
+      </div>
     </>
   )
 }

@@ -1,15 +1,13 @@
 "use client"
 
-import { Participants } from "@/components/luckyWheel/Participants"
-import { Wheel } from "@/components/luckyWheel/Wheel"
+import Scene from "@/components/scene/Scene"
 import styles from "../page.module.css"
 
 export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Wheel />
-        <Participants />
+        <Scene />
       </main>
     </div>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/styles"
+import { Wheel } from "@/components/luckyWheel/Wheel"
 import { useDiscord } from "@/providers/discordProvider"
 import styles from "./page.module.css"
 
@@ -8,6 +8,7 @@ export default function Home() {
   const { sdk, user, ready } = useDiscord()
 
   if (!ready) return <p>Initializing Discord...</p>
+  if (ready) console.log(user)
 
   const handleSendMsg = async () => {
     const response = await fetch("/api/message", {
@@ -26,7 +27,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Button onClick={handleSendMsg}>Send test mld</Button>
+        <Wheel />
       </main>
     </div>
   )
