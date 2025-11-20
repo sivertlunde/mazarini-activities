@@ -1,16 +1,19 @@
 import { FirebaseHelper } from "@/lib/db/firebaseHelper"
 
-export async function GET(request: Request) {
-  const req = await request.json()
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params
 
-  if (!req.userId)
+  if (!id)
     return new Response(JSON.stringify({ error: "Missing params" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     })
 
   const firebase = new FirebaseHelper()
-  const user = await firebase.getUser(req.userId)
+  const user = await firebase.getUser(id)
   // if (!user) {
   //     console.error('Fant ikke bruker')
   //   return new Response(JSON.stringify({ error: "Failed to find user" }), {
@@ -18,7 +21,7 @@ export async function GET(request: Request) {
   //     headers: { "Content-Type": "application/json" },
   //   })
   // }
-  return user
+  return Response.json(user)
 }
 
 export async function POST(request: Request) {
