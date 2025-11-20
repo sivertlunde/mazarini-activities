@@ -2,9 +2,9 @@ import { FirebaseHelper } from "@/lib/db/firebaseHelper"
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params
+  const { id } = await context.params
 
   if (!id)
     return new Response(JSON.stringify({ error: "Missing params" }), {
