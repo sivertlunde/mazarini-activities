@@ -5,24 +5,24 @@ import { useDiscord } from "@/providers/discordProvider"
 import styles from "./page.module.css"
 
 export default function Home() {
-  const { sdk, user, ready } = useDiscord()
+  const { sdk, discordUser, ready } = useDiscord()
 
   if (!ready) return <p>Initializing Discord...</p>
-  if (ready) console.log(user)
 
-  const handleSendMsg = async () => {
-    const response = await fetch("/api/message", {
-      method: "POST",
+  const getUser = async () => {
+    const response = await fetch("/api/firebase/user", {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        channelId: sdk?.channelId,
-        content: "Sender mld som Høie, fra activity",
+        userId: discordUser?.id ?? "",
       }),
     })
     console.log(response)
   }
+
+  if (ready) getUser()
 
   return (
     <div className={styles.page}>

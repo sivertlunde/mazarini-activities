@@ -1,7 +1,5 @@
 "use client"
 
-import { MazariniUser } from "@/lib/db/databaseInterface"
-import { FirebaseHelper } from "@/lib/db/firebaseHelper"
 import { DiscordUser } from "@/types/user"
 import { DiscordSDK } from "@discord/embedded-app-sdk"
 import React, { createContext, useContext, useEffect, useState } from "react"
@@ -9,14 +7,14 @@ import React, { createContext, useContext, useEffect, useState } from "react"
 interface DiscordContextType {
   sdk: DiscordSDK | null
   discordUser: DiscordUser | null
-  user: MazariniUser | null
+  // user: MazariniUser | null
   ready: boolean
 }
 
 const DiscordContext = createContext<DiscordContextType>({
   sdk: null,
   discordUser: null,
-  user: null,
+  // user: null,
   ready: false,
 })
 
@@ -29,7 +27,7 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
 }) => {
   const [sdk, setSdk] = useState<DiscordSDK | null>(null)
   const [discordUser, setDiscordUser] = useState<DiscordUser | null>(null)
-  const [user, setUser] = useState<MazariniUser | null>(null)
+  // const [user, setUser] = useState<MazariniUser | null>(null)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -94,9 +92,9 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
           }
         ).then((response) => response.json())) as DiscordUser | null
         setDiscordUser(discordUser)
-        const firebase = new FirebaseHelper()
-        const user = await firebase.getUser(discordUser?.id ?? "")
-        setUser(user)
+        // const firebase = new FirebaseHelper()
+        // const user = await firebase.getUser(discordUser?.id ?? "")
+        // setUser(user)
       }
       setSdk(discordSdk)
       setReady(true)
@@ -104,7 +102,7 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
   }, [])
 
   return (
-    <DiscordContext.Provider value={{ sdk, discordUser, user, ready }}>
+    <DiscordContext.Provider value={{ sdk, discordUser, ready }}>
       {children}
     </DiscordContext.Provider>
   )
