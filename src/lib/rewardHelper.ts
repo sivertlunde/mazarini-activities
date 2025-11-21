@@ -38,15 +38,20 @@ export class RewardHelper {
   }
 
   private async updateUser(user: MazariniUser) {
-    await fetch(`/api/firebase/user/${user.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
-    })
+    await fetch(
+      `https://mazarini-activities.vercel.app/api/firebase/user/${user.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      }
+    )
   }
 
   private async getUser(userId: string): Promise<MazariniUser> {
-    const response = await fetch(`/api/firebase/user/${userId}`)
+    const response = await fetch(
+      `https://mazarini-activities.vercel.app/api/firebase/user/${userId}`
+    )
     return (await response.json()) as MazariniUser
   }
 
