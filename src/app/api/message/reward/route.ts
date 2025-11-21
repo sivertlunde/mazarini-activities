@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   console.log("Server fikk reward:", reward)
   const rewardHelper = new RewardHelper()
   const messageBody = await rewardHelper.resolveReward(userId, reward)
-  console.log("Prøver å sende melding:", messageBody)
+  console.log("Prøver å sende melding:", JSON.stringify(messageBody, null, 2))
   // Now you can safely post to Discord using your bot token
   const restResp = await fetch(
     `https://discord.com/api/channels/${channelId}/messages`,
