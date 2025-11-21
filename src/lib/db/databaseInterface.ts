@@ -340,6 +340,28 @@ export interface MazariniStorage {
     previous: string[] //list of slugs
   }
   mastermind?: string[]
+  luckyWheel?: ILuckyWheelReward[]
+}
+
+export interface ILuckyWheelReward {
+  name: string
+  weight: number
+  type: LuckyWheelRewardType
+  amount?: number
+  quality?: LootboxQuality
+  description?: string
+}
+
+export enum LuckyWheelRewardType {
+  chips = "chips",
+  dond = "dond",
+  chest = "chest",
+  box = "box",
+  effect_dpn = "effect_dpn",
+  effect_double_pot_win = "effect_double_pot_win",
+  effect_free_rolls = "effect_free_rolls",
+  effect_double_pot_addition = "effect_double_pot_addition",
+  effect_lootbox_odds = "effect_lootbox_odds",
 }
 
 export interface IMoreOrLess {
