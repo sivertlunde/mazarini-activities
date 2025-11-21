@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ messageBody }),
+      body: JSON.stringify(messageBody),
     }
   )
 
