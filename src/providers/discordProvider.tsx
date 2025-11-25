@@ -50,7 +50,6 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({
     async function setupDiscordSdk() {
       const discordSdk = new DiscordSDK(clientID)
       await discordSdk.ready()
-      console.log("Discord SDK is ready")
 
       // Authorize with Discord Client
       const { code } = await discordSdk.commands.authorize({

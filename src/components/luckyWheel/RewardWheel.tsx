@@ -63,9 +63,6 @@ export const RewardWheel = (props: RewardWheelProps) => {
   const { sdk } = useDiscord()
   const { user, rewards, setHasSpin } = props
 
-  console.log("RewardWheel fikk bruker:", user)
-  console.log("RewardWheel fikk rewards:", rewards)
-
   const [spinning, setSpinning] = useState(false)
   const [rotation, setRotation] = useState(0)
 
@@ -76,18 +73,6 @@ export const RewardWheel = (props: RewardWheelProps) => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const numSectors = rewards.reduce((sum, curr) => sum + curr.weight, 0)
-
-  const darkenColor = (color: string, amount: number): string => {
-    let r = parseInt(color.slice(1, 3), 16)
-    let g = parseInt(color.slice(3, 5), 16)
-    let b = parseInt(color.slice(5, 7), 16)
-
-    r = Math.max(0, r - amount)
-    g = Math.max(0, g - amount)
-    b = Math.max(0, b - amount)
-
-    return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`
-  }
 
   const getColor = (index: number, colorArray: string[]) => {
     let color = colorArray[index % colorArray.length]
@@ -128,7 +113,10 @@ export const RewardWheel = (props: RewardWheelProps) => {
       ctx.textAlign = "right"
       ctx.textBaseline = "middle"
       ctx.fillStyle = "#000"
-      ctx.font = numSectors > 50 ? "16px Helvetica" : "20px Helvetica"
+      ctx.font =
+        rewards[i].weight / numSectors < 0.05
+          ? "14px Helvetica"
+          : "18px Helvetica"
       ctx.fillText(capitalizeAndCut(rewards[i].name) || "", radius * 0.9, 0)
       ctx.restore()
       startAngle = endAngle
@@ -150,15 +138,6 @@ export const RewardWheel = (props: RewardWheelProps) => {
     ctx.fillStyle = "#ff0000"
     ctx.fill()
     ctx.restore()
-
-    // // Draw a smaller center circle
-    // ctx.save()
-    // ctx.beginPath()
-    // ctx.translate(canvas.width / 2, canvas.height / 2)
-    // ctx.arc(0, 0, radius / 10, 0, Math.PI * 2)
-    // ctx.fillStyle = darkenColor(colors[0], 30)
-    // ctx.fill()
-    // ctx.restore()
   }
 
   useEffect(() => {
@@ -261,7 +240,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
           width={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
           height={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
           onClick={startSpin}
-          style={{ borderRadius: "50%", border: "10px solid #5d2c1e" }}
+          style={{ borderRadius: "50%", border: "8px solid #5d2c1e" }}
         />
         <ButtonsContainer>
           <Button

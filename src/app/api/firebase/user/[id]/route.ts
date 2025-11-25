@@ -26,7 +26,6 @@ export async function PUT(req: Request) {
       status: 400,
       headers: { "Content-Type": "application/json" },
     })
-  console.log("Oppdaterer bruker:", updatedUser.id)
   const firebase = new FirebaseHelper()
   firebase.updateUser(updatedUser)
   return Response.json({ success: true })
