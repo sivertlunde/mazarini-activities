@@ -5,7 +5,6 @@ import styled from "styled-components"
 import useWindowDimensions from "@/hooks/useWindowDimensions"
 import { ILuckyWheelReward, MazariniUser } from "@/lib/db/databaseInterface"
 import { useDiscord } from "@/providers/discordProvider"
-import { Header } from "./Header"
 import { Button } from "./styles"
 import { capitalizeAndCut } from "./utils"
 
@@ -233,7 +232,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div style={{ width: "100%", height: "100%" }}>
         <canvas
           ref={canvasRef}
@@ -242,14 +241,14 @@ export const RewardWheel = (props: RewardWheelProps) => {
           onClick={startSpin}
           style={{ borderRadius: "50%", border: "8px solid #5d2c1e" }}
         />
-        <ButtonsContainer>
+        {/* <ButtonsContainer>
           <Button
             onClick={startSpin}
             disabled={rewards.length === 0 || spinning}
           >
             Spin
           </Button>
-        </ButtonsContainer>
+        </ButtonsContainer> */}
         {showPopup && popupWinner && (
           <Popup>
             <h2>Gratulerer</h2>
