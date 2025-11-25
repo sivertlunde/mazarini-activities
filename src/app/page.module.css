@@ -26,6 +26,8 @@
   align-items: flex-start;
   background-color: var(--foreground);
   padding: 120px 60px;
+  justify-content: center;
+  align-items: center;
 }
 
 .intro {

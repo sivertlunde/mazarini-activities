@@ -14,7 +14,6 @@ export class RewardHelper {
     const user = await this.getUser(userId)
     if (reward.type === LuckyWheelRewardType.chips) {
       user.chips += reward.amount ?? 0
-      this.updateUser(user)
       text = `Gratulerer med ${reward.amount ?? 0} chips, <@${user.id}>!`
     } else if (reward.type === LuckyWheelRewardType.dond) {
       text = `<@${user.id}>`
@@ -30,10 +29,8 @@ export class RewardHelper {
         reward.type === LuckyWheelRewardType.chest
       )
     }
-    // else if (reward.type.substring(0, 6) === "effect") {
-    // text = `<@${user.id}>`
-    // button = ButtonHelper.createLootButton(userId, reward.quality ?? 'basic', reward.type === LuckyWheelRewardType.chest)
-    // }
+    user.dailySpins = (user.dailySpins ?? 1) - 1
+    this.updateUser(user)
     return this.getMessageBody(text, button)
   }
 

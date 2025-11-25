@@ -42,18 +42,26 @@ const ButtonsContainer = styled.div`
   margin-top: 1rem;
 `
 
-const colors = ["#f9ead4", "#11133c"]
-
-const textColors = ["#010203", "#fcf8f3"]
+const colors = [
+  "#FF4B4B",
+  "#FFB84D",
+  "#FFE84D",
+  "#6DDB4B",
+  "#4BDDDD",
+  "#4B7BFF",
+  "#A64BFF",
+  "#FF4BE3",
+]
 
 interface RewardWheelProps {
   user: MazariniUser
   rewards: ILuckyWheelReward[]
+  setHasSpin: (hasSpins: boolean) => void
 }
 
 export const RewardWheel = (props: RewardWheelProps) => {
   const { sdk } = useDiscord()
-  const { user, rewards } = props
+  const { user, rewards, setHasSpin } = props
 
   console.log("RewardWheel fikk bruker:", user)
   console.log("RewardWheel fikk rewards:", rewards)
@@ -81,6 +89,16 @@ export const RewardWheel = (props: RewardWheelProps) => {
     return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`
   }
 
+  const getColor = (index: number, colorArray: string[]) => {
+    let color = colorArray[index % colorArray.length]
+    if (
+      index === rewards.length - 1 &&
+      colors[index % colors.length] === colors[0]
+    )
+      color = colorArray[1]
+    return color
+  }
+
   const drawWheel = () => {
     const canvas = canvasRef.current!
     const ctx = canvas.getContext("2d")!
@@ -100,10 +118,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
       ctx.moveTo(0, 0)
       ctx.arc(0, 0, radius, startAngle, endAngle)
       ctx.closePath()
-      const color = darkenColor(
-        i === 0 ? "#eb6381" : colors[i % colors.length],
-        30
-      )
+      const color = getColor(i, colors)
       ctx.fillStyle = color
       ctx.fill()
 
@@ -112,8 +127,8 @@ export const RewardWheel = (props: RewardWheelProps) => {
       ctx.rotate((startAngle + endAngle) / 2)
       ctx.textAlign = "right"
       ctx.textBaseline = "middle"
-      ctx.fillStyle = darkenColor(textColors[i % colors.length], 30)
-      ctx.font = numSectors > 50 ? "12px Arial" : "16px Arial"
+      ctx.fillStyle = "#000"
+      ctx.font = numSectors > 50 ? "16px Helvetica" : "20px Helvetica"
       ctx.fillText(capitalizeAndCut(rewards[i].name) || "", radius * 0.9, 0)
       ctx.restore()
       startAngle = endAngle
@@ -132,18 +147,18 @@ export const RewardWheel = (props: RewardWheelProps) => {
     ctx.lineTo(0, -indicatorWidth / 2)
     ctx.lineTo(0, indicatorWidth / 2)
     ctx.closePath()
-    ctx.fillStyle = "red"
+    ctx.fillStyle = "#ff0000"
     ctx.fill()
     ctx.restore()
 
-    // Draw a smaller center circle
-    ctx.save()
-    ctx.beginPath()
-    ctx.translate(canvas.width / 2, canvas.height / 2)
-    ctx.arc(0, 0, radius / 10, 0, Math.PI * 2)
-    ctx.fillStyle = darkenColor(colors[0], 30)
-    ctx.fill()
-    ctx.restore()
+    // // Draw a smaller center circle
+    // ctx.save()
+    // ctx.beginPath()
+    // ctx.translate(canvas.width / 2, canvas.height / 2)
+    // ctx.arc(0, 0, radius / 10, 0, Math.PI * 2)
+    // ctx.fillStyle = darkenColor(colors[0], 30)
+    // ctx.fill()
+    // ctx.restore()
   }
 
   useEffect(() => {
@@ -246,7 +261,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
           width={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
           height={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
           onClick={startSpin}
-          style={{ borderRadius: "50%", border: "2px solid black" }}
+          style={{ borderRadius: "50%", border: "10px solid #5d2c1e" }}
         />
         <ButtonsContainer>
           <Button
@@ -265,6 +280,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
             <Button
               onClick={() => {
                 setShowPopup(false)
+                setHasSpin(false)
               }}
               disabled={rewards.length === 0 || spinning}
             >
