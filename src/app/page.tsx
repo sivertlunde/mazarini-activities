@@ -1,5 +1,6 @@
 "use client"
 
+import { Header } from "@/components/luckyWheel/Header"
 import { RewardWheel } from "@/components/luckyWheel/RewardWheel"
 import { ILuckyWheelReward, MazariniUser } from "@/lib/db/databaseInterface"
 import { useDiscord } from "@/providers/discordProvider"
@@ -45,8 +46,8 @@ export default function Home() {
     return (
       <div className={styles.page}>
         <main className={styles.main}>
-          <p style={{ marginBottom: 20 }}>2 sek...</p>
-          <PacmanLoader color={"#fff"} />
+          <Header />
+          <PacmanLoader color={"#FFEF43"} />
         </main>
       </div>
     )

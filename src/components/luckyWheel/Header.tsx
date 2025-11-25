@@ -9,10 +9,11 @@ const HeaderContainer = styled.header`
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-bottom: 100px;
 `
 
 export const Header: FC = () => (
   <HeaderContainer>
-    <h1>Lykkehjul</h1>
+    <h1>Mazarini Lykkehjul</h1>
   </HeaderContainer>
 )
