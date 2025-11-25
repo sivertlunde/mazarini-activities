@@ -1,6 +1,6 @@
 export type env = "dev" | "prod"
-export const environment: env = "dev"
-export const database: env = "dev"
+export const environment: env = "prod"
+export const database: env = "prod"
 export const firebaseConfig = {
   apiKey: "AIzaSyD79P27fHBLCxE1MPLHwKxznHnMNIgpQwI",
   authDomain: "mazarini-384411.firebaseapp.com",
