@@ -147,7 +147,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
   }, [rewards, rotation, width, height])
 
   const startSpin = () => {
-    if (spinning) return
+    if (spinning || showPopup) return
     setSpinning(true)
 
     // Set the number of full rotations and calculate final rotation
