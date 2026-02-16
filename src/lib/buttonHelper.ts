@@ -13,21 +13,15 @@ export class ButtonHelper {
     }
   }
 
-  static createLootButton(
-    userId: string,
-    quality: string,
-    isChest: boolean = false
-  ) {
+  static createLootButton(userId: string, quality: string, type: LootType) {
     return {
       type: 1, // Action row
       components: [
         {
           type: 2, // Button
-          label: `${isChest ? "Open loot chest" : "Open lootbox"}`,
+          label: `Open loot ${type}`,
           style: 1,
-          custom_id: `OPEN_LOOT;${userId};${quality};${
-            isChest ? "chest" : "box"
-          };`,
+          custom_id: `OPEN_LOOT;${userId};${quality};${type};`,
         },
       ],
     }
@@ -47,3 +41,5 @@ export class ButtonHelper {
     }
   }
 }
+
+export type LootType = "box" | "chest" | "pack"

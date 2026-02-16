@@ -1,4 +1,4 @@
-import { ButtonHelper } from "./buttonHelper"
+import { ButtonHelper, LootType } from "./buttonHelper"
 import {
   ILuckyWheelReward,
   LuckyWheelRewardType,
@@ -20,13 +20,14 @@ export class RewardHelper {
       button = ButtonHelper.createDondButton(userId, reward.amount ?? 10)
     } else if (
       reward.type === LuckyWheelRewardType.chest ||
-      reward.type === LuckyWheelRewardType.box
+      reward.type === LuckyWheelRewardType.box ||
+      reward.type === LuckyWheelRewardType.pack
     ) {
       text = `<@${user.id}>`
       button = ButtonHelper.createLootButton(
         userId,
         reward.quality ?? "basic",
-        reward.type === LuckyWheelRewardType.chest
+        reward.type as LootType
       )
     }
     user.dailySpins = (user.dailySpins ?? 1) - 1

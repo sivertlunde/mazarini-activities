@@ -357,6 +357,7 @@ export enum LuckyWheelRewardType {
   dond = "dond",
   chest = "chest",
   box = "box",
+  pack = "pack",
   effect_dpn = "effect_dpn",
   effect_double_pot_win = "effect_double_pot_win",
   effect_free_rolls = "effect_free_rolls",
