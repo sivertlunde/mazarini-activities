@@ -13,19 +13,24 @@ const Popup = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
-  color: #006400;
-  padding: 1rem 2rem;
+  background: linear-gradient(160deg, #1c1712, #2a2115);
+  color: #f1e9d2;
+  padding: 1.25rem 2.25rem;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border: 2px solid #c9a227;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6), 0 0 40px rgba(201, 162, 39, 0.25);
   text-align: center;
   z-index: 1000;
-  animation: popin 1s ease-out;
+  animation: popin 0.35s ease-out;
+
+  h2 {
+    color: #c9a227;
+  }
 
   @keyframes popin {
     0% {
       opacity: 0;
-      transform: translate(-50%, -50%) scale(0.5);
+      transform: translate(-50%, -50%) scale(0.97);
     }
     100% {
       opacity: 1;
@@ -41,16 +46,57 @@ const ButtonsContainer = styled.div`
   margin-top: 1rem;
 `
 
-const colors = [
-  "#FF4B4B",
-  "#FFB84D",
-  "#FFE84D",
-  "#6DDB4B",
-  "#4BDDDD",
-  "#4B7BFF",
-  "#A64BFF",
-  "#FF4BE3",
-]
+// Hogwarts house colors — Gryffindor, Slytherin, Ravenclaw, Hufflepuff
+const colors = ["#740001", "#1a472a", "#0e1a40", "#ecb939"]
+const textColors = ["#f1e9d2", "#eef3ea", "#eef1fa", "#241c02"]
+
+const lighten = (color: string, amount: number): string => {
+  const r = parseInt(color.slice(1, 3), 16)
+  const g = parseInt(color.slice(3, 5), 16)
+  const b = parseInt(color.slice(5, 7), 16)
+  const lr = Math.min(255, Math.round(r + (255 - r) * amount))
+  const lg = Math.min(255, Math.round(g + (255 - g) * amount))
+  const lb = Math.min(255, Math.round(b + (255 - b) * amount))
+  return `#${((1 << 24) | (lr << 16) | (lg << 8) | lb).toString(16).slice(1)}`
+}
+
+const WheelFrame = styled.div`
+  position: relative;
+  border-radius: 50%;
+  padding: clamp(10px, 1.6vw, 22px);
+  background: radial-gradient(
+    circle at 32% 30%,
+    #f4d78c,
+    #c9a227 45%,
+    #7a5b12 75%,
+    #3d2c07 100%
+  );
+  box-shadow: 0 0 0 4px #1c1305, 0 0 55px 12px rgba(201, 162, 39, 0.45),
+    0 0 110px 35px rgba(116, 0, 1, 0.22), 0 0 110px 35px rgba(26, 71, 42, 0.18),
+    inset 0 0 30px rgba(0, 0, 0, 0.65);
+  animation: wheelGlow 4s ease-in-out infinite;
+
+  @keyframes wheelGlow {
+    0%,
+    100% {
+      box-shadow: 0 0 0 4px #1c1305, 0 0 55px 12px rgba(201, 162, 39, 0.45),
+        0 0 110px 35px rgba(116, 0, 1, 0.22),
+        0 0 110px 35px rgba(26, 71, 42, 0.18), inset 0 0 30px rgba(0, 0, 0, 0.65);
+    }
+    50% {
+      box-shadow: 0 0 0 4px #1c1305, 0 0 70px 18px rgba(201, 162, 39, 0.6),
+        0 0 130px 40px rgba(116, 0, 1, 0.3), 0 0 130px 40px rgba(26, 71, 42, 0.26),
+        inset 0 0 30px rgba(0, 0, 0, 0.65);
+    }
+  }
+`
+
+const InnerRing = styled.div`
+  border-radius: 50%;
+  padding: clamp(4px, 0.8vw, 10px);
+  background: linear-gradient(145deg, #241c02, #4a3608);
+  line-height: 0;
+`
 
 interface RewardWheelProps {
   user: MazariniUser
@@ -67,6 +113,8 @@ export const RewardWheel = (props: RewardWheelProps) => {
 
   const [showPopup, setShowPopup] = useState(false)
   const [popupWinner, setPopupWinner] = useState<ILuckyWheelReward | null>(null)
+  const [highlightIndex, setHighlightIndex] = useState<number | null>(null)
+  const [glowPulse, setGlowPulse] = useState(0)
 
   const { width, height } = useWindowDimensions()
 
@@ -98,20 +146,35 @@ export const RewardWheel = (props: RewardWheelProps) => {
     // Draw sectors
     for (let i = 0; i < rewards.length; i++) {
       const endAngle = (startAngle + rewards[i].weight * sliceAngle) % 360
+      const isHighlighted = i === highlightIndex
+
+      ctx.save()
+      if (isHighlighted) {
+        // Pulsing golden glow + brightened fill on the winning slice
+        ctx.shadowColor = "rgba(244, 215, 140, 0.95)"
+        ctx.shadowBlur = 25 + glowPulse * 25
+      }
       ctx.beginPath()
       ctx.moveTo(0, 0)
       ctx.arc(0, 0, radius, startAngle, endAngle)
       ctx.closePath()
-      const color = getColor(i, colors)
-      ctx.fillStyle = color
+      ctx.fillStyle = isHighlighted
+        ? lighten(getColor(i, colors), 0.35 + glowPulse * 0.25)
+        : getColor(i, colors)
       ctx.fill()
+      if (isHighlighted) {
+        ctx.lineWidth = 3
+        ctx.strokeStyle = "#f4d78c"
+        ctx.stroke()
+      }
+      ctx.restore()
 
       // Draw the name in the sector
       ctx.save()
       ctx.rotate((startAngle + endAngle) / 2)
       ctx.textAlign = "right"
       ctx.textBaseline = "middle"
-      ctx.fillStyle = "#000"
+      ctx.fillStyle = getColor(i, textColors)
       ctx.font =
         rewards[i].weight / numSectors < 0.05
           ? "14px Helvetica"
@@ -134,7 +197,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
     ctx.lineTo(0, -indicatorWidth / 2)
     ctx.lineTo(0, indicatorWidth / 2)
     ctx.closePath()
-    ctx.fillStyle = "#ff0000"
+    ctx.fillStyle = "#c9a227"
     ctx.fill()
     ctx.restore()
   }
@@ -144,7 +207,21 @@ export const RewardWheel = (props: RewardWheelProps) => {
       drawWheel()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewards, rotation, width, height])
+  }, [rewards, rotation, width, height, highlightIndex, glowPulse])
+
+  // Drives a slow pulsing glow on the winning slice for as long as it's highlighted
+  useEffect(() => {
+    if (highlightIndex === null) return
+    let raf: number
+    const start = performance.now()
+    const loop = (now: number) => {
+      const elapsed = now - start
+      setGlowPulse((Math.sin(elapsed / 260) + 1) / 2)
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(raf)
+  }, [highlightIndex])
 
   const startSpin = () => {
     if (spinning || showPopup) return
@@ -153,34 +230,48 @@ export const RewardWheel = (props: RewardWheelProps) => {
     // Set the number of full rotations and calculate final rotation
     const numFullRotations = Math.random() * 5 + 5 // Between 5 and 10 full rotations
     const totalRotation = numFullRotations * 360
-    const finalRotation = (rotation - totalRotation) % 360
+    const baseRotation = rotation
 
+    // Anticipation: a quick pull backward first, like winding up before letting go,
+    // then the real spin continues on from wherever that pull-back left off.
+    const pullBackAngle = 10 + Math.random() * 6 // 10-16 degrees
+    const pullBackDuration = 220
     const spinDuration = 6000
-    const easing = (t: number) => {
-      // Ease-out cubic
-      return 1 - Math.pow(1 - t, 3)
-    }
+    const finalRotation = (baseRotation + pullBackAngle - totalRotation) % 360
 
-    let startTime: number
+    const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t)
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
 
-    const animate = (time: number) => {
-      if (!startTime) startTime = time
-      const elapsed = time - startTime
-      const t = Math.min(elapsed / spinDuration, 1)
-      const easeT = easing(t)
-      const currentRotation = rotation - totalRotation * easeT
+    let pullStartTime: number
+    const animatePullBack = (time: number) => {
+      if (!pullStartTime) pullStartTime = time
+      const elapsed = time - pullStartTime
+      const t = Math.min(elapsed / pullBackDuration, 1)
+      setRotation(baseRotation + pullBackAngle * easeOutQuad(t))
 
-      setRotation(currentRotation)
-
-      if (elapsed < spinDuration) {
-        requestAnimationFrame(animate)
+      if (elapsed < pullBackDuration) {
+        requestAnimationFrame(animatePullBack)
       } else {
-        setSpinning(false)
-        determineWinner(finalRotation)
+        const spinStartRotation = baseRotation + pullBackAngle
+        let spinStartTime: number
+        const animateSpin = (spinTime: number) => {
+          if (!spinStartTime) spinStartTime = spinTime
+          const spinElapsed = spinTime - spinStartTime
+          const spinT = Math.min(spinElapsed / spinDuration, 1)
+          setRotation(spinStartRotation - totalRotation * easeOutCubic(spinT))
+
+          if (spinElapsed < spinDuration) {
+            requestAnimationFrame(animateSpin)
+          } else {
+            setSpinning(false)
+            determineWinner(finalRotation)
+          }
+        }
+        requestAnimationFrame(animateSpin)
       }
     }
 
-    requestAnimationFrame(animate)
+    requestAnimationFrame(animatePullBack)
   }
 
   const determineWinner = (finalRotation: number) => {
@@ -188,10 +279,16 @@ export const RewardWheel = (props: RewardWheelProps) => {
     const normalizedRotation = ((finalRotation % 360) + 360) % 360
 
     const winningSector = Math.ceil(normalizedRotation / sliceAngle)
-    const winner = getWinner(winningSector)
+    const winnerIndex = getWinnerIndex(winningSector)
+    const winner = rewards[winnerIndex]
     rewardWinner(winner)
-    setPopupWinner(winner)
-    setShowPopup(true)
+
+    // Let the winning slice glow for a beat before the popup steals the spotlight
+    setHighlightIndex(winnerIndex)
+    setTimeout(() => {
+      setPopupWinner(winner)
+      setShowPopup(true)
+    }, 1500)
   }
 
   const rewardWinner = async (reward: ILuckyWheelReward) => {
@@ -206,14 +303,14 @@ export const RewardWheel = (props: RewardWheelProps) => {
     })
   }
 
-  const getWinner = (ticketNr: number) => {
+  const getWinnerIndex = (ticketNr: number) => {
     let currentTicket = 0
     let index = 0
     while (currentTicket < ticketNr) {
       currentTicket += rewards[index].weight
       index++
     }
-    return rewards[index - 1]
+    return index - 1
   }
 
   const startConfetti = () => {
@@ -233,14 +330,26 @@ export const RewardWheel = (props: RewardWheelProps) => {
   return (
     <>
       {/* <Header /> */}
-      <div style={{ width: "100%", height: "100%" }}>
-        <canvas
-          ref={canvasRef}
-          width={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
-          height={Math.min((width ?? 0) * 0.8, (height ?? 0) * 0.8)}
-          onClick={startSpin}
-          style={{ borderRadius: "50%", border: "8px solid #5d2c1e" }}
-        />
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <WheelFrame>
+          <InnerRing>
+            <canvas
+              ref={canvasRef}
+              width={Math.min((width ?? 0) * 0.72, (height ?? 0) * 0.72)}
+              height={Math.min((width ?? 0) * 0.72, (height ?? 0) * 0.72)}
+              onClick={startSpin}
+              style={{ borderRadius: "50%", display: "block" }}
+            />
+          </InnerRing>
+        </WheelFrame>
         {/* <ButtonsContainer>
           <Button
             onClick={startSpin}
@@ -258,6 +367,7 @@ export const RewardWheel = (props: RewardWheelProps) => {
             <Button
               onClick={() => {
                 setShowPopup(false)
+                setHighlightIndex(null)
                 setHasSpin(false)
               }}
               disabled={rewards.length === 0 || spinning}

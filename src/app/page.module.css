@@ -1,9 +1,9 @@
 .page {
-  --background: #000;
-  --foreground: #000;
+  --background: #07080d;
+  --foreground: #07080d;
 
-  --text-primary: #fff;
-  --text-secondary: #666;
+  --text-primary: #f1e9d2;
+  --text-secondary: #a89a78;
 
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
@@ -15,6 +15,28 @@
   justify-content: center;
   font-family: var(--font-geist-sans);
   background-color: var(--background);
+  background-image: radial-gradient(
+      ellipse 900px 650px at 18% 12%,
+      rgba(116, 0, 1, 0.28),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 900px 650px at 82% 10%,
+      rgba(26, 71, 42, 0.28),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 1000px 750px at 50% 105%,
+      rgba(14, 26, 64, 0.32),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 1200px 900px at 50% 45%,
+      rgba(201, 162, 39, 0.08),
+      transparent 70%
+    ),
+    linear-gradient(180deg, #04050a 0%, #0a0c14 45%, #07080d 100%);
+  background-attachment: fixed;
 }
 
 .main {
@@ -24,7 +46,7 @@
   /* max-width: 800px; */
   flex-direction: column;
   align-items: flex-start;
-  background-color: var(--foreground);
+  background-color: transparent;
   padding: 120px 60px;
   justify-content: center;
   align-items: center;
@@ -120,23 +142,5 @@ a.secondary {
     font-size: 32px;
     line-height: 40px;
     letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
   }
 }
