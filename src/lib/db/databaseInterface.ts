@@ -94,6 +94,10 @@ export interface MazariniUser {
   effects?: IUserEffects
   christmasCalendar?: UserCalendarGift[]
   dailyGameStats?: IDailyGameStats
+  /** Only the piece of the bot's CCG system this app needs (the full schema lives in the main bot repo) */
+  ccg?: {
+    shards?: number
+  }
 }
 
 export interface IDailyGameStats {
@@ -354,6 +358,7 @@ export interface ILuckyWheelReward {
 
 export enum LuckyWheelRewardType {
   chips = "chips",
+  shards = "shards",
   dond = "dond",
   chest = "chest",
   box = "box",

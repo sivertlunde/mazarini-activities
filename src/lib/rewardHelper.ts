@@ -15,6 +15,9 @@ export class RewardHelper {
     if (reward.type === LuckyWheelRewardType.chips) {
       user.chips += reward.amount ?? 0
       text = `Gratulerer med ${reward.amount ?? 0} chips, <@${user.id}>!`
+    } else if (reward.type === LuckyWheelRewardType.shards) {
+      user.ccg = { ...user.ccg, shards: (user.ccg?.shards ?? 0) + (reward.amount ?? 0) }
+      text = `Gratulerer med ${reward.amount ?? 0} shards, <@${user.id}>!`
     } else if (reward.type === LuckyWheelRewardType.dond) {
       text = `<@${user.id}>`
       button = ButtonHelper.createDondButton(userId, reward.amount ?? 10)
