@@ -36,7 +36,7 @@ export default function Home() {
     if (ready && !rewards) {
       fetch(`/api/firebase/luckywheel`).then((res) => {
         res.json().then((rewardList) => {
-          setRewards(shuffleArray(rewardList))
+          setRewards(rewardList)
         })
       })
     }
